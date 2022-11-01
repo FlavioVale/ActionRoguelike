@@ -65,7 +65,7 @@ void AExplosiveBarrel::BeginPlay()
 		}
 	}
 
-	Destroy(ExplosiveBarrel);
+	//Destroy(ExplosiveBarrel);
 }
 
 // Called every frame

@@ -38,6 +38,8 @@ protected:
 
 	void MoveRight(float Value);
 
+	void Jump();
+
 	void PrimaryAttack();
 
 public:	
@@ -48,3 +50,4 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 };
+
