@@ -73,7 +73,7 @@ void AExplosiveBarrel::OnActorHit(UPrimitiveComponent* HitComponent, AActor* Oth
 }
 
 
-/*
+/*this is the old code
 // Called when the game starts or when spawned
 void AExplosiveBarrel::BeginPlay()
 {

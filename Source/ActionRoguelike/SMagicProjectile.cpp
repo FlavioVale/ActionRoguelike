@@ -13,15 +13,18 @@ ASMagicProjectile::ASMagicProjectile()
 	PrimaryActorTick.bCanEverTick = true;
 
 	SphereComp = CreateDefaultSubobject<USphereComponent>("SphereComp");
+	//Another type of collision below:
 	//SphereComp->SetCollisionObjectType(ECC_WorldDynamic);
 	//SphereComp->SetCollisionResponseToAllChannels(ECR_Ignore);
 	//SphereComp->SetCollisionResponseToChannel(ECC_Pawn, ECR_Overlap);
 	SphereComp->SetCollisionProfileName("Projectile");
 	RootComponent = SphereComp;
 
+	//Attaching the particle to the sphere component
 	EffectComp = CreateDefaultSubobject<UParticleSystemComponent>("EffectComp");
 	EffectComp->SetupAttachment(SphereComp);
 
+	//particle's movement
 	MovementComp = CreateDefaultSubobject<UProjectileMovementComponent>("MovementComp");
 	MovementComp->InitialSpeed = 1000.0f;
 	MovementComp->bRotationFollowsVelocity = true;

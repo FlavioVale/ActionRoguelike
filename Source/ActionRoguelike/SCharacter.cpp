@@ -45,22 +45,25 @@ void ASCharacter::Tick(float DeltaTime)
 // Called to bind functionality to input
 void ASCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
+	//Input component setup
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
+	//Directional movement
 	PlayerInputComponent->BindAxis("MoveForward", this, &ASCharacter::MoveForward);
 	PlayerInputComponent->BindAxis("MoveRight", this, &ASCharacter::MoveRight);
-
+	//Directional Camera
 	PlayerInputComponent->BindAxis("Turn", this, &APawn::AddControllerYawInput);
 	PlayerInputComponent->BindAxis("LookUp", this, &APawn::AddControllerPitchInput);
-
+	//Primary Attack
 	PlayerInputComponent->BindAction("PrimaryAttack", IE_Pressed, this, &ASCharacter::PrimaryAttack);
-
+	//Jump action
 	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ASCharacter::Jump);
 	PlayerInputComponent->BindAction("Jump", IE_Released, this, &ASCharacter::StopJump);
 }
 
 void ASCharacter::MoveForward(float Value)
 {
+	//Foward and backward movement
 	FRotator ControlRot = GetControlRotation();
 	ControlRot.Pitch = 0.0f;
 	ControlRot.Roll = 0.0f;
@@ -70,6 +73,7 @@ void ASCharacter::MoveForward(float Value)
 
 void ASCharacter::MoveRight(float Value)
 {
+	//Lateral movement
 	FRotator ControlRot = GetControlRotation();
 	ControlRot.Pitch = 0.0f;
 	ControlRot.Roll = 0.0f;

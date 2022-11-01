@@ -41,7 +41,7 @@ public:
 	UFUNCTION()
 	void OnActorHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
 
-	/*
+	/* - this is the old code
 	UPROPERTY(VisibleAnywhere)
 		class UStaticMeshComponent* ExplosiveBarrel;
 
