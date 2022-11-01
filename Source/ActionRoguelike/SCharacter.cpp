@@ -14,10 +14,12 @@ ASCharacter::ASCharacter()
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
+	//The camera's arm
 	SpringArmComp = CreateDefaultSubobject<USpringArmComponent>("SpringArmComp");
 	SpringArmComp->bUsePawnControlRotation = true;
 	SpringArmComp->SetupAttachment(RootComponent);
 
+	//The camera itself
 	CameraComp = CreateDefaultSubobject<UCameraComponent>("CameraComp");
 	CameraComp->SetupAttachment(SpringArmComp);
 
@@ -54,6 +56,7 @@ void ASCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponen
 	PlayerInputComponent->BindAction("PrimaryAttack", IE_Pressed, this, &ASCharacter::PrimaryAttack);
 
 	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ASCharacter::Jump);
+	PlayerInputComponent->BindAction("Jump", IE_Released, this, &ASCharacter::StopJump);
 }
 
 void ASCharacter::MoveForward(float Value)
@@ -85,18 +88,25 @@ void ASCharacter::MoveRight(float Value)
 void ASCharacter::Jump()
 {
 	Super::Jump();
+	bPressedJump = true;
+}
+
+void ASCharacter::StopJump()
+{
+	bPressedJump = false;
 }
 
 void ASCharacter::PrimaryAttack()
 {
+	//Selecting the hand bone for the projectile
 	FVector HandLocation = GetMesh()->GetSocketLocation("Muzzle_01");
 
+	//Selecting the rotation of the projectile
 	FTransform SpawnTM = FTransform(GetControlRotation(), HandLocation);
 
+	//Spawning the projectile
 	FActorSpawnParameters SpawnParams;
 	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
-
-
 
 	GetWorld()->SpawnActor<AActor>(ProjectileClass, SpawnTM, SpawnParams);
 }

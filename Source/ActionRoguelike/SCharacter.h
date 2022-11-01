@@ -39,6 +39,7 @@ protected:
 	void MoveRight(float Value);
 
 	void Jump();
+	void StopJump();
 
 	void PrimaryAttack();
 
