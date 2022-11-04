@@ -26,14 +26,14 @@ AExplosiveBarrel::AExplosiveBarrel()
 	Explosion = CreateDefaultSubobject<URadialForceComponent>("Explosion");
 	Explosion->SetupAttachment(BarrelMesh);
 
-	//Adding a small constant force to the component
+	//Adding a small constant force to the component - As shown in the example*
 	Explosion->SetAutoActivate(false);
 
 	//Explosion parameters
 	Explosion->Radius = 250.0f;
 	Explosion->ImpulseStrength = 1500.0f;
 
-	//Option to ignore the Mass of others objects(True = Impulse strength is the same for all, false = considers mass, needs more impulse to push some objects, something like 200000.0f)
+	//Option to ignore the Mass of others objects(True = Impulse strength is the same for all, false = considers mass, needs more impulse to push some objects, something like 200000.0f)*
 	Explosion->bImpulseVelChange = true;
 
 	//Adding the World collision channel to be affected
