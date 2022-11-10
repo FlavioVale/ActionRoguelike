@@ -8,6 +8,7 @@
 
 class UCameraComponent;
 class USpringArmComponent;
+class USInteractionComponent;
 
 UCLASS()
 class ACTIONROGUELIKE_API ASCharacter : public ACharacter
@@ -31,6 +32,9 @@ protected:
 	UPROPERTY(VisibleAnywhere)
 	UCameraComponent* CameraComp;
 
+	UPROPERTY(VisibleAnywhere)
+	USInteractionComponent* InteractionComp;
+
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
@@ -42,6 +46,25 @@ protected:
 	void StopJump();
 
 	void PrimaryAttack();
+
+	void PrimaryInteract();
+
+	void ZoomIn();
+	void ZoomOut();
+
+	UPROPERTY(VisibleAnywhere)
+	float ZoomMin = 30.f;
+
+	UPROPERTY(VisibleAnywhere)
+	float ZoomMax = 1000.f;
+
+	UPROPERTY(VisibleAnywhere)
+	float ZoomDefault = 300.f;
+
+	UPROPERTY(VisibleAnywhere)
+	float ZoomValue = 10.f;
+
+	void CameraZoom(const float Value);
 
 public:	
 	// Called every frame

@@ -2,11 +2,11 @@
 
 
 #include "SCharacter.h"
+#include "SInteractionComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Camera/CameraComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/Character.h"
-
 
 // Sets default values
 ASCharacter::ASCharacter()
@@ -17,11 +17,14 @@ ASCharacter::ASCharacter()
 	//The camera's arm
 	SpringArmComp = CreateDefaultSubobject<USpringArmComponent>("SpringArmComp");
 	SpringArmComp->bUsePawnControlRotation = true;
-	SpringArmComp->SetupAttachment(RootComponent);
+	SpringArmComp->SetupAttachment(RootComponent); // The other option is attach to mesh/bone is: GetMesh(), "head" ?EyeLocation
+	SpringArmComp->TargetArmLength = ZoomDefault;
 
 	//The camera itself
 	CameraComp = CreateDefaultSubobject<UCameraComponent>("CameraComp");
 	CameraComp->SetupAttachment(SpringArmComp);
+
+	InteractionComp = CreateDefaultSubobject<USInteractionComponent>("InteractionComp");
 
 	GetCharacterMovement()->bOrientRotationToMovement = true;
 
@@ -56,9 +59,16 @@ void ASCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponen
 	PlayerInputComponent->BindAxis("LookUp", this, &APawn::AddControllerPitchInput);
 	//Primary Attack
 	PlayerInputComponent->BindAction("PrimaryAttack", IE_Pressed, this, &ASCharacter::PrimaryAttack);
+	//Interact
+	PlayerInputComponent->BindAction("PrimaryInteract", IE_Pressed, this, &ASCharacter::PrimaryInteract);
 	//Jump action
 	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ASCharacter::Jump);
 	PlayerInputComponent->BindAction("Jump", IE_Released, this, &ASCharacter::StopJump);
+	//Camera Control by buttons
+	PlayerInputComponent->BindAction("ZoomIn", IE_Repeat, this, &ASCharacter::ZoomIn);
+	PlayerInputComponent->BindAction("ZoomOut", IE_Repeat, this, &ASCharacter::ZoomOut);
+	//Camera Control by scroll
+	PlayerInputComponent->BindAxis("CameraZoom", this, &ASCharacter::CameraZoom);
 }
 
 void ASCharacter::MoveForward(float Value)
@@ -113,4 +123,34 @@ void ASCharacter::PrimaryAttack()
 	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
 
 	GetWorld()->SpawnActor<AActor>(ProjectileClass, SpawnTM, SpawnParams);
+}
+
+void ASCharacter::PrimaryInteract()
+{
+	
+	if (InteractionComp)
+	{
+		InteractionComp->PrimaryInteract();
+	}
+}
+
+void ASCharacter::ZoomIn()
+{
+	//SpringArmComp->TargetArmLength -= 5; // Raw input
+	SpringArmComp->TargetArmLength -= ZoomValue; //Using preset values
+}
+
+void ASCharacter::ZoomOut()
+{
+	//SpringArmComp->TargetArmLength += 5; // Raw input
+	SpringArmComp->TargetArmLength += ZoomValue; //Using preset values
+}
+
+void ASCharacter::CameraZoom(const float Value)
+{
+	if (Value == 0.f || !Controller) return;
+	{
+		const float NewZoom = SpringArmComp->TargetArmLength + (Value * ZoomValue);
+		SpringArmComp->TargetArmLength = FMath::Clamp(NewZoom, ZoomMin, ZoomMax);
+	}
 }
