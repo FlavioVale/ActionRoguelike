@@ -112,6 +112,19 @@ void ASCharacter::StopJump()
 
 void ASCharacter::PrimaryAttack()
 {
+	//Call the animation
+	PlayAnimMontage(AttackAnim);
+
+	//Set a timer to fire the projectile properly
+	GetWorldTimerManager().SetTimer(TimerHandle_PrimaryAttack, this, &ASCharacter::PrimaryAttack_TimeElapsed, 0.2f);
+
+	//GetWorldTimerManager().ClearTimer(TimerHandle_PrimaryAttack);
+
+
+}
+
+void ASCharacter::PrimaryAttack_TimeElapsed()
+{
 	//Selecting the hand bone for the projectile
 	FVector HandLocation = GetMesh()->GetSocketLocation("Muzzle_01");
 
